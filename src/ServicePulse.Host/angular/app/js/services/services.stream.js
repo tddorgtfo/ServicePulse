@@ -18,8 +18,14 @@
             }
         });
 
+        if (window.defaultConfig.useLongPolling) {
+            connection.start({ transport: 'longPolling' } );
+        }
+        else {
+            connection.start();
+        }
+
         connection
-            .start()
             .done(function () {
 
                 $log.info('SignalR started');

@@ -9,4 +9,5 @@ window.defaultConfig = {
   auth_domain: "https://your-tenant.auth0.com/",
   auth_clientId: "1234567890",
   auth_audience: "User",
+  useLongPolling: false,
 };
