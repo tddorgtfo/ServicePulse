@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { accessToken, useAuth } from "./authentication";
 
 export const serviceControlUrl = ref(null);
 export const monitoringUrl = ref(null);
@@ -12,12 +13,26 @@ export function useIsMonitoringEnabled() {
 }
 
 export function useFetchFromServiceControl(suffix) {
+  if (useAuth) {
+    return fetch(serviceControlUrl.value + suffix, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+  }
   return fetch(serviceControlUrl.value + suffix);
 }
 
 export function useFetchFromMonitoring(suffix) {
   if (useIsMonitoringDisabled()) {
     return Promise.resolve(null);
+  }
+  if (useAuth) {
+    return fetch(serviceControlUrl.value + suffix, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
   }
   return fetch(monitoringUrl.value + suffix);
 }
@@ -29,6 +44,9 @@ export function usePostToServiceControl(suffix, payload) {
   if (payload !== undefined) {
     requestOptions.headers = { "Content-Type": "application/json" };
     requestOptions.body = JSON.stringify(payload);
+    if (useAuth) {
+      requestOptions.Authorization = "Bearer " + accessToken;
+    }
   }
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
@@ -40,6 +58,9 @@ export function usePutToServiceControl(suffix, payload) {
   if (payload !== undefined) {
     requestOptions.headers = { "Content-Type": "application/json" };
     requestOptions.body = JSON.stringify(payload);
+    if (useAuth) {
+      requestOptions.Authorization = "Bearer " + accessToken;
+    }
   }
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
@@ -48,6 +69,9 @@ export function useDeleteFromServiceControl(suffix) {
   const requestOptions = {
     method: "DELETE",
   };
+  if (useAuth) {
+    requestOptions.Authorization = "Bearer " + accessToken;
+  }
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
 
@@ -58,6 +82,9 @@ export function usePatchToServiceControl(suffix, payload) {
   if (payload !== undefined) {
     requestOptions.headers = { "Content-Type": "application/json" };
     requestOptions.body = JSON.stringify(payload);
+    if (useAuth) {
+      requestOptions.Authorization = "Bearer " + accessToken;
+    }
   }
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }

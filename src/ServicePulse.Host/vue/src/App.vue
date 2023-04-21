@@ -6,7 +6,9 @@ import { useServiceControlUrls } from "./composables/serviceServiceControlUrls.j
 import { useServiceControlVersion, useServiceControl } from "./composables/serviceServiceControl.js";
 import { useLicense } from "./composables/serviceLicense.js";
 import "bootstrap";
+import { useAuthentication } from "./composables/authentication.js";
 
+useAuthentication();
 useServiceControlUrls();
 useServiceControl();
 useServiceControlVersion();
