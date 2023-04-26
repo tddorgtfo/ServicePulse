@@ -6,7 +6,7 @@ window.defaultConfig = {
   monitoring_urls: ["http://localhost:33633/"],
   showPendingRetry: false,
   useAuth: false,
-  auth_domain: "https://your-tenant.auth0.com/",
+  auth_domain: "your-tenant.auth0.com",
   auth_clientId: "1234567890",
   auth_audience: "User",
 };
