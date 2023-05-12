@@ -13,7 +13,6 @@ export async function useAuthentication() {
     const auth0Client = await createAuth0Client({
       domain: window.defaultConfig.auth_domain,
       clientId: window.defaultConfig.auth_clientId,
-      cacheLocation: "localstorage",
       authorizationParams: {
         audience: window.defaultConfig.auth_audience,
         redirect_uri: window.location.origin,
@@ -33,6 +32,7 @@ export async function useAuthentication() {
 
     accessToken = await auth0Client.getTokenSilently();
 
-    console.log(accessToken);
+    window.sessionStorage.setItem("useAuth", useAuth);
+    window.sessionStorage.setItem("accessToken", accessToken);
   }
 }

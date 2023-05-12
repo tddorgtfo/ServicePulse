@@ -12,8 +12,16 @@ export function useIsMonitoringEnabled() {
   return !useIsMonitoringDisabled();
 }
 
+export function useIsAuthDisabled() {
+  return useAuth === null || monitoringUrl.value === "" || monitoringUrl.value === "!";
+}
+
+export function useIsAuthEnabled() {
+  return !useIsMonitoringDisabled();
+}
+
 export function useFetchFromServiceControl(suffix) {
-  if (useAuth) {
+  if (useIsAuthEnabled()) {
     return fetch(serviceControlUrl.value + suffix, {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -27,7 +35,7 @@ export function useFetchFromMonitoring(suffix) {
   if (useIsMonitoringDisabled()) {
     return Promise.resolve(null);
   }
-  if (useAuth) {
+  if (useIsAuthEnabled()) {
     return fetch(serviceControlUrl.value + suffix, {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -41,13 +49,15 @@ export function usePostToServiceControl(suffix, payload) {
   const requestOptions = {
     method: "POST",
   };
+  const headers = new Headers();
   if (payload !== undefined) {
-    requestOptions.headers = { "Content-Type": "application/json" };
+    headers.append("Content-Type", "application/json");
     requestOptions.body = JSON.stringify(payload);
-    if (useAuth) {
-      requestOptions.Authorization = "Bearer " + accessToken;
-    }
   }
+  if (useIsAuthEnabled()) {
+    headers.append("Authorization", "Bearer " + accessToken);
+  }
+  requestOptions.headers = headers;
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
 
@@ -55,13 +65,15 @@ export function usePutToServiceControl(suffix, payload) {
   const requestOptions = {
     method: "PUT",
   };
+  const headers = new Headers();
   if (payload !== undefined) {
-    requestOptions.headers = { "Content-Type": "application/json" };
+    headers.append("Content-Type", "application/json");
     requestOptions.body = JSON.stringify(payload);
-    if (useAuth) {
-      requestOptions.Authorization = "Bearer " + accessToken;
-    }
   }
+  if (useIsAuthEnabled()) {
+    headers.append("Authorization", "Bearer " + accessToken);
+  }
+  requestOptions.headers = headers;
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
 
@@ -69,9 +81,11 @@ export function useDeleteFromServiceControl(suffix) {
   const requestOptions = {
     method: "DELETE",
   };
-  if (useAuth) {
-    requestOptions.Authorization = "Bearer " + accessToken;
+  const headers = new Headers();
+  if (useIsAuthEnabled()) {
+    headers.append("Authorization", "Bearer " + accessToken);
   }
+  requestOptions.headers = headers;
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
 
@@ -79,13 +93,15 @@ export function usePatchToServiceControl(suffix, payload) {
   const requestOptions = {
     method: "PATCH",
   };
+  const headers = new Headers();
   if (payload !== undefined) {
-    requestOptions.headers = { "Content-Type": "application/json" };
+    headers.append("Content-Type", "application/json");
     requestOptions.body = JSON.stringify(payload);
-    if (useAuth) {
-      requestOptions.Authorization = "Bearer " + accessToken;
-    }
   }
+  if (useIsAuthEnabled()) {
+    headers.append("Authorization", "Bearer " + accessToken);
+  }
+  requestOptions.headers = headers;
   return fetch(serviceControlUrl.value + suffix, requestOptions);
 }
 
